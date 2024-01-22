@@ -6,6 +6,17 @@ const Formulario = ({ setAlert }) => {
   const [password, setPassword] = useState("");
   const [validatePassword, setValidatePassword] = useState("");
 
+  const validarPassword = (contraseña) => {
+    /*Nueva funcionalidad: la contraseña debe tener al menos
+     10 caracteres
+     1 mayuscula
+     1 simbolo
+     1 numero
+     */
+    const re = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{10,}$/;
+    return re.test(contraseña);
+  };
+
   const validarDatos = (event) => {
     event.preventDefault();
 
@@ -16,11 +27,23 @@ const Formulario = ({ setAlert }) => {
       return;
     }
 
+    if (!validarPassword(password)) {
+      setAlert({
+        error: true,
+        message: "La contraseña debe tener al menos 10 caracteres, incluyendo 1 mayúscula, 1 símbolo y 1 número.",
+        color: "danger"
+      });
+      return;
+    }
+
     if (password !== validatePassword) {
       setAlert({error: true, message: "Las contraseñas estan erroneas", color: "danger"
       });
       return;
     }
+
+    /*Funcionalidad 2: Si todas las validaciones son correctas imprime el usuario en la consola.*/
+    console.log('Usuario registrado:', { nombre, email, contraseña: password });
 
     setAlert({
       error: false, message: "Haz creado tu cuenta con exito!", color: "success",
